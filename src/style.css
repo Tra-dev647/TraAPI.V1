@@ -55,3 +55,7 @@ footer small { font-size: 11px; }
 .searchbox input[type="search"]::-webkit-search-cancel-button { display: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .hero { padding-top: 28px; padding-bottom: 28px; }
+.hero { padding-top: 40px; padding-bottom: 52px; }
+.topline { gap: 16px; font-size: 14px; letter-spacing: 2px; margin-bottom: 56px; }
+.seal { width: 68px; height: 68px; font-size: 40px; border-width: 2px; }
+@media (min-width: 700px) { .hero { padding-top: 56px; padding-bottom: 64px; } .seal { width: 84px; height: 84px; font-size: 50px; } .topline { font-size: 16px; margin-bottom: 64px; } }
