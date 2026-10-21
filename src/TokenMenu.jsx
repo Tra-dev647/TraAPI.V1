@@ -95,12 +95,13 @@ export default function TokenMenu() {
               <button type="button" className="clear" aria-label="បិទ" onClick={() => setModalOpen(false)}>×</button>
             </div>
             <p className="modal-text">
-              ប្រើ Token នេះដើម្បីហៅ API វចនានុក្រម។ រក្សាវាជាសម្ងាត់ កុំចែករំលែកជាសាធារណៈ។
+              ប្រើ Token នេះដើម្បីហៅ API វចនានុក្រមបានគ្មានកំណត់ទាំងចំនួន និងរយៈពេល។ រក្សាវាជាសម្ងាត់ កុំចែករំលែកជាសាធារណៈ។
             </p>
 
             {token ? (
               <>
                 <div className="token-box">{token}</div>
+                <div className="token-expiry">ប្រើបានគ្មានកំណត់ ✓</div>
                 <div className="modal-actions">
                   <button type="button" className="primary" onClick={() => copy(token, "token")}>
                     {copied === "token" ? "បានចម្លង ✓" : "ចម្លង Token"}

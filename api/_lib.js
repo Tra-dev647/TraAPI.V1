@@ -114,10 +114,21 @@ export function createToken() {
   return `kd_${body}.${sign(body)}`;
 }
 
+// 0 = tokens never expire (default). Set TOKEN_DAYS in Vercel to add an expiry.
+export const tokenDays = () => Number(process.env.TOKEN_DAYS) || 0;
+
 function verifyToken(token) {
   if (typeof token !== "string" || !token.startsWith("kd_")) return false;
   const [body, sig] = token.slice(3).split(".");
   if (!body || !sig) return false;
+  let issued;
+  try {
+    issued = JSON.parse(Buffer.from(body, "base64url").toString("utf8")).t;
+  } catch {
+    return false;
+  }
+  if (!Number.isFinite(issued)) return false;
+  if (tokenDays() > 0 && Date.now() - issued > tokenDays() * 86400000) return false;
   const expected = sign(body);
   const a = Buffer.from(sig);
   const b = Buffer.from(expected);
