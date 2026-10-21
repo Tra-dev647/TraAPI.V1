@@ -69,23 +69,30 @@ function useDictionary() {
   return state;
 }
 
-function Splash() {
+function Splash({ onOut }) {
   const [phase, setPhase] = useState("in"); // in -> out -> gone
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("out"), 2200);
+    const t1 = setTimeout(() => {
+      setPhase("out");
+      onOut();
+    }, 2200);
     const t2 = setTimeout(() => setPhase("gone"), 2900);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (phase === "gone") return null;
   return (
     <div
       className={`splash ${phase === "out" ? "splash-out" : ""}`}
-      onClick={() => setPhase("gone")}
+      onClick={() => {
+        setPhase("gone");
+        onOut();
+      }}
       aria-hidden="true"
     >
       <div className="splash-word">
@@ -103,6 +110,7 @@ function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [page, setPage] = useState(0);
   const [copiedId, setCopiedId] = useState(null);
+  const [logoShown, setLogoShown] = useState(false);
 
   // Keep typing responsive while the large list is filtered.
   const deferredQuery = useDeferredValue(query);
@@ -149,9 +157,9 @@ function App() {
 
   return (
     <div className="app-shell">
-      <Splash />
+      <Splash onOut={() => setLogoShown(true)} />
       <header className="hero">
-        <div className="topline">
+        <div className={`topline ${logoShown ? "logo-drop" : "logo-hidden"}`}>
           <span className="seal">ក</span>
           <span>KHMER LANGUAGE • DICTIONARY</span>
         </div>
