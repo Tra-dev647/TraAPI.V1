@@ -141,35 +141,14 @@ function App() {
             </button>
           )}
         </div>
-        <div className="hint">វាយពាក្យខ្មែរ ដើម្បីស្វែងរកក្នុងវចនានុក្រម</div>
       </header>
 
       <main className="content">
-        <div className="stats">
-          <div>
-            <strong>{loading ? "…" : rows.length.toLocaleString("en-US")}</strong>
-            <span>ពាក្យក្នុងទិន្នន័យ</span>
-          </div>
-          <div>
-            <strong>{hasQuery ? results.length.toLocaleString("en-US") : "—"}</strong>
-            <span>លទ្ធផលស្វែងរក</span>
-          </div>
-        </div>
-
         {error && <div className="notice error" role="alert">{error}</div>}
         {loading && (
           <div className="empty" role="status">
             <div className="spinner" />
             កំពុងផ្ទុកវចនានុក្រម…
-          </div>
-        )}
-
-        {!loading && !error && !hasQuery && (
-          <div className="welcome">
-            <div className="book-icon">📖</div>
-            <h2>សូមស្វាគមន៍</h2>
-            <p>ចាប់ផ្ដើមដោយវាយពាក្យខ្មែរនៅក្នុងប្រអប់ស្វែងរកខាងលើ។</p>
-            <div className="tip">គន្លឹះ៖ អ្នកអាចស្វែងរកតាមពាក្យ ឬផ្នែកមួយនៃនិយមន័យបាន។</div>
           </div>
         )}
 
@@ -249,11 +228,6 @@ function App() {
         )}
       </main>
 
-      <footer>
-        <span className="footer-mark">ក</span>
-        <p>វចនានុក្រមខ្មែរ · Khmer Dictionary</p>
-        <small>ទិន្នន័យ៖ Khmer Choun Nath Dictionary / Open Institute</small>
-      </footer>
     </div>
   );
 }

@@ -53,3 +53,5 @@ footer small { font-size: 11px; }
 @media (min-width: 700px) { .hero { padding-top: 36px; padding-bottom: 48px; } .stats { max-width: 540px; } .result-card { padding: 20px; } }
 .result-card:focus-visible, .pagination button:focus-visible, .copy:focus-visible { outline: 2px solid #39734e; outline-offset: 2px; }
 .searchbox input[type="search"]::-webkit-search-cancel-button { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero { padding-top: 28px; padding-bottom: 28px; }
