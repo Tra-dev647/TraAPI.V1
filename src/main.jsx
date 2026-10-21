@@ -21,6 +21,21 @@ const normalize = (value) =>
     .replace(/[​-‍﻿]/g, "")
     .toLocaleLowerCase();
 
+// Short preview: first sense up to the first "។", with its examples ("ដូចជា ...").
+function makeShort(definition) {
+  const text = String(definition || "").replace(/\s+/g, " ").trim();
+  if (!text) return "";
+  const end = text.indexOf("។");
+  const clause = end >= 0 ? text.slice(0, end) : text;
+  let split = clause.indexOf(" : ");
+  if (split < 0) split = clause.indexOf(":");
+  const meaning = (split >= 0 ? clause.slice(0, split) : clause).trim();
+  const examples = split >= 0 ? clause.slice(split + 1).replace(/^[\s:]+/, "").trim() : "";
+  let out = `${meaning} ។`;
+  if (examples) out += ` ដូចជា ${examples} ។`;
+  return out;
+}
+
 function useDictionary() {
   const [state, setState] = useState({ rows: [], loading: true, error: "" });
 
@@ -45,6 +60,7 @@ function useDictionary() {
               id: String(r._id || i + 1),
               word,
               definition,
+              short: makeShort(definition),
               _word: normalize(word),
               _definition: normalize(definition)
             };
@@ -233,24 +249,22 @@ function App() {
                       <span className="word">{item.word || "—"}</span>
                       <span className="arrow">{open ? "▲" : "▼"}</span>
                     </div>
+                    <p className={`definition ${open ? "full" : "short"}`}>
+                      {(open ? item.definition : item.short) || "មិនមាននិយមន័យ"}
+                    </p>
                     {open && (
-                      <>
-                        <p className="definition full">
-                          {item.definition || "មិនមាននិយមន័យ"}
-                        </p>
-                        <div className="detail">
-                          <button
-                            type="button"
-                            className="copy"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              copyItem(item);
-                            }}
-                          >
-                            {copiedId === item.id ? "បានចម្លង ✓" : "ចម្លងពាក្យ"}
-                          </button>
-                        </div>
-                      </>
+                      <div className="detail">
+                        <button
+                          type="button"
+                          className="copy"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copyItem(item);
+                          }}
+                        >
+                          {copiedId === item.id ? "បានចម្លង ✓" : "ចម្លងពាក្យ"}
+                        </button>
+                      </div>
                     )}
                   </div>
                 );
