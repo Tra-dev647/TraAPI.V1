@@ -38,7 +38,9 @@ function useDictionary() {
           .filter((r) => r && (r.word || r.definition))
           .map((r, i) => {
             const word = String(r.word || "").trim();
-            const definition = String(r.definition || "").trim();
+            const definition = String(r.definition || "")
+              .replace(/<"\d+">([^<]*?)\/a/g, "$1")
+              .trim();
             return {
               id: String(r._id || i + 1),
               word,
@@ -77,10 +79,17 @@ function App() {
   // Keep typing responsive while the large list is filtered.
   const deferredQuery = useDeferredValue(query);
 
+  // Match the headword only: exact matches first, then words that start with the query.
   const results = useMemo(() => {
     const q = normalize(deferredQuery.trim());
     if (!q) return [];
-    return rows.filter((r) => r._word.includes(q) || r._definition.includes(q));
+    const exact = [];
+    const prefix = [];
+    for (const r of rows) {
+      if (r._word === q) exact.push(r);
+      else if (r._word.startsWith(q)) prefix.push(r);
+    }
+    return [...exact, ...prefix];
   }, [rows, deferredQuery]);
 
   const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
@@ -113,19 +122,14 @@ function App() {
   return (
     <div className="app-shell">
       <header className="hero">
-        <div className="topline">
-          <span className="seal">ក</span>
-          <span>KHMER LANGUAGE • DICTIONARY</span>
-        </div>
-        <h1>វចនានុក្រមខ្មែរ</h1>
-        <p className="subtitle">ស្វែងយល់ពាក្យខ្មែរ និងអត្ថន័យរបស់វា</p>
+        <h1 className="sr-only">វចនានុក្រមខ្មែរ</h1>
         <div className="searchbox">
           <span aria-hidden="true">⌕</span>
           <input
             type="search"
             value={query}
             onChange={(e) => search(e.target.value)}
-            placeholder="ស្វែងរកពាក្យ ឬអត្ថន័យ..."
+            placeholder="ស្វែងរកពាក្យ..."
             aria-label="ស្វែងរកពាក្យ"
             autoComplete="off"
             spellCheck={false}
@@ -162,9 +166,6 @@ function App() {
 
         {!loading && visible.length > 0 && (
           <>
-            <div className="results-heading">
-              លទ្ធផលស្វែងរក <span>{results.length.toLocaleString("en-US")}</span>
-            </div>
             <div className="result-list">
               {visible.map((item) => {
                 const open = selectedId === item.id;
