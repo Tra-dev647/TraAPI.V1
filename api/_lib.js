@@ -111,15 +111,17 @@ function sign(body) {
 
 export function createToken() {
   const body = b64(JSON.stringify({ i: crypto.randomBytes(8).toString("hex"), t: Date.now() }));
-  return `kd_${body}.${sign(body)}`;
+  return `Tra-${body}.${sign(body)}`;
 }
 
 // 0 = tokens never expire (default). Set TOKEN_DAYS in Vercel to add an expiry.
 export const tokenDays = () => Number(process.env.TOKEN_DAYS) || 0;
 
 function verifyToken(token) {
-  if (typeof token !== "string" || !token.startsWith("kd_")) return false;
-  const [body, sig] = token.slice(3).split(".");
+  if (typeof token !== "string") return false;
+  const prefix = token.startsWith("Tra-") ? 4 : token.startsWith("kd_") ? 3 : 0;
+  if (!prefix) return false;
+  const [body, sig] = token.slice(prefix).split(".");
   if (!body || !sig) return false;
   let issued;
   try {

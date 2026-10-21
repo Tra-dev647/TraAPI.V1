@@ -8,9 +8,11 @@ import React, {
 } from "react";
 import { createRoot } from "react-dom/client";
 import Papa from "papaparse";
-import TokenMenu from "./TokenMenu.jsx";
+import Menu from "./Menu.jsx";
+import ApiPage from "./ApiPage.jsx";
 import "./style.css";
 
+let splashSeen = false; // play the Hello intro once per visit
 const PAGE_SIZE = 20;
 const DATA_URL = `${import.meta.env.BASE_URL}data/kh_dictionary.csv`;
 
@@ -87,14 +89,18 @@ function useDictionary() {
 }
 
 function Splash({ onOut }) {
-  const [phase, setPhase] = useState("in"); // in -> out -> gone
+  const [phase, setPhase] = useState(splashSeen ? "gone" : "in"); // in -> out -> gone
 
   useEffect(() => {
+    if (splashSeen) return undefined;
     const t1 = setTimeout(() => {
       setPhase("out");
       onOut();
     }, 2200);
-    const t2 = setTimeout(() => setPhase("gone"), 2900);
+    const t2 = setTimeout(() => {
+      splashSeen = true;
+      setPhase("gone");
+    }, 2900);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -107,6 +113,7 @@ function Splash({ onOut }) {
     <div
       className={`splash ${phase === "out" ? "splash-out" : ""}`}
       onClick={() => {
+        splashSeen = true;
         setPhase("gone");
         onOut();
       }}
@@ -127,7 +134,7 @@ function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [page, setPage] = useState(0);
   const [copiedId, setCopiedId] = useState(null);
-  const [logoShown, setLogoShown] = useState(false);
+  const [logoShown, setLogoShown] = useState(splashSeen);
 
   // Keep typing responsive while the large list is filtered.
   const deferredQuery = useDeferredValue(query);
@@ -176,7 +183,7 @@ function App() {
     <div className="app-shell">
       <Splash onOut={() => setLogoShown(true)} />
       <header className="hero">
-        <TokenMenu />
+        <Menu />
         <div className={`topline ${logoShown ? "logo-drop" : "logo-hidden"}`}>
           <span className="seal">ក</span>
           <span>KHMER LANGUAGE • DICTIONARY</span>
@@ -295,8 +302,23 @@ function App() {
   );
 }
 
+function Root() {
+  const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const onNav = () => {
+      setPath(window.location.pathname);
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener("popstate", onNav);
+    return () => window.removeEventListener("popstate", onNav);
+  }, []);
+
+  return path.startsWith("/developers") ? <ApiPage /> : <App />;
+}
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <Root />
   </StrictMode>
 );
