@@ -122,6 +122,10 @@ function App() {
   return (
     <div className="app-shell">
       <header className="hero">
+        <div className="topline">
+          <span className="seal">ក</span>
+          <span>KHMER LANGUAGE • DICTIONARY</span>
+        </div>
         <h1 className="sr-only">វចនានុក្រមខ្មែរ</h1>
         <div className="searchbox">
           <span aria-hidden="true">⌕</span>
