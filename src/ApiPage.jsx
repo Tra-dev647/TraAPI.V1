@@ -81,6 +81,14 @@ function DocsTab({ base }) {
       <Code>{`curl -H "Authorization: Bearer YOUR_TOKEN" \\
   "${base}/api/word/ព្យាយាម"`}</Code>
 
+      <h2>GET /api/en/search</h2>
+      <p>ស្វែងរកអង់គ្លេស → ខ្មែរ។ ប្រើ parameter ដូច /api/search (q, limit, page, exact)។</p>
+      <Code>{`curl -H "Authorization: Bearer YOUR_TOKEN" \\
+  "${base}/api/en/search?q=love&limit=3"`}</Code>
+
+      <h2>GET /api/en/&#123;word&#125;</h2>
+      <p>យកគ្រប់ entry របស់ពាក្យអង់គ្លេសមួយ។ ឆ្លើយ 404 បើរកមិនឃើញ។</p>
+
       <h2>GET /api/random</h2>
       <p>ពាក្យចៃដន្យមួយ។</p>
 
@@ -111,7 +119,7 @@ print(r.json()["results"])`}</Code>
         </tbody>
       </table>
 
-      <p className="credit">ទិន្នន័យ៖ Khmer Choun Nath Dictionary / Open Institute (LGPL 2.1)</p>
+      <p className="credit">ទិន្នន័យ៖ Khmer Choun Nath Dictionary / Open Institute (LGPL 2.1) · SBBIC English-Khmer Dictionary (MIT, Society for Better Books in Cambodia)</p>
     </div>
   );
 }

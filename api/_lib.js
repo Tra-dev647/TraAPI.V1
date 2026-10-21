@@ -11,7 +11,7 @@ export const normalize = (value) =>
     .toLocaleLowerCase();
 
 // Minimal RFC 4180 CSV parser (handles quotes, escaped quotes, newlines in fields).
-function parseCsv(text) {
+export function parseCsv(text) {
   const rows = [];
   let row = [];
   let field = "";
@@ -157,4 +157,21 @@ export function requireToken(req, res) {
     return true;
   }
   return false;
+}
+
+// ---- English -> Khmer dictionary (SBBIC) ----
+let enCache = null;
+export function loadEnglish() {
+  if (enCache) return enCache;
+  const file = path.join(process.cwd(), "public", "data", "en_km_dictionary.csv");
+  const [header, ...body] = parseCsv(fs.readFileSync(file, "utf8"));
+  const idx = Object.fromEntries(header.map((h, i) => [h.trim(), i]));
+  enCache = body
+    .map((r, i) => {
+      const word = String(r[idx.word] ?? "").trim();
+      const definition = String(r[idx.definition] ?? "").trim();
+      return { id: String(r[idx._id] || i + 1), word, definition, short: definition, _word: normalize(word) };
+    })
+    .filter((e) => e.word && e.definition);
+  return enCache;
 }
