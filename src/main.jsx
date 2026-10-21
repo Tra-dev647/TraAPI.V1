@@ -11,6 +11,7 @@ import Papa from "papaparse";
 import "./style.css";
 
 const PAGE_SIZE = 20;
+const LONG_TEXT = 130; // definitions longer than this get a "see more" hint
 const DATA_URL = `${import.meta.env.BASE_URL}data/kh_dictionary.csv`;
 
 // Normalize text so that search is case-insensitive and ignores zero-width
@@ -69,6 +70,34 @@ function useDictionary() {
   return state;
 }
 
+function Splash() {
+  const [phase, setPhase] = useState("in"); // in -> out -> gone
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase("out"), 2200);
+    const t2 = setTimeout(() => setPhase("gone"), 2900);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, []);
+
+  if (phase === "gone") return null;
+  return (
+    <div
+      className={`splash ${phase === "out" ? "splash-out" : ""}`}
+      onClick={() => setPhase("gone")}
+      aria-hidden="true"
+    >
+      <div className="splash-word">
+        {"Hello".split("").map((ch, i) => (
+          <span key={i} style={{ animationDelay: `${i * 0.18}s` }}>{ch}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const { rows, loading, error } = useDictionary();
   const [query, setQuery] = useState("");
@@ -121,6 +150,7 @@ function App() {
 
   return (
     <div className="app-shell">
+      <Splash />
       <header className="hero">
         <div className="topline">
           <span className="seal">ក</span>
@@ -195,6 +225,9 @@ function App() {
                     <p className={`definition ${open ? "full" : ""}`}>
                       {item.definition || "មិនមាននិយមន័យ"}
                     </p>
+                    {item.definition.length > LONG_TEXT && (
+                      <span className="more">{open ? "បង្រួម ▲" : "មើលបន្ថែម ▼"}</span>
+                    )}
                     {open && (
                       <div className="detail">
                         លេខសម្គាល់៖ {item.id}

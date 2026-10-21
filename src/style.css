@@ -59,3 +59,11 @@ footer small { font-size: 11px; }
 .topline { gap: 16px; font-size: 14px; letter-spacing: 2px; margin-bottom: 56px; }
 .seal { width: 68px; height: 68px; font-size: 40px; border-width: 2px; }
 @media (min-width: 700px) { .hero { padding-top: 56px; padding-bottom: 64px; } .seal { width: 84px; height: 84px; font-size: 50px; } .topline { font-size: 16px; margin-bottom: 64px; } }
+.result-card { position: relative; }
+.more { display: inline-block; margin-top: 8px; color: #1b5136; font-size: 13px; font-weight: 700; }
+.splash { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #244c39 0, #102820 70%); transition: opacity .7s ease; cursor: pointer; }
+.splash-out { opacity: 0; pointer-events: none; }
+.splash-word { display: flex; gap: 2px; font-size: clamp(54px, 16vw, 110px); font-weight: 700; color: #e6cc88; letter-spacing: 2px; }
+.splash-word span { display: inline-block; opacity: 0; transform: translateY(-120vh) rotate(-12deg); animation: drop .9s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+@keyframes drop { 0% { opacity: 0; transform: translateY(-60vh) rotate(-12deg); } 30% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .splash-word span { animation: none; opacity: 1; transform: none; } }
