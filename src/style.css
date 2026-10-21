@@ -67,3 +67,4 @@ footer small { font-size: 11px; }
 .splash-word span { display: inline-block; opacity: 0; transform: translateY(-120vh) rotate(-12deg); animation: drop .9s cubic-bezier(.3, 1.4, .5, 1) forwards; }
 @keyframes drop { 0% { opacity: 0; transform: translateY(-60vh) rotate(-12deg); } 30% { opacity: 1; } 100% { opacity: 1; transform: translateY(0) rotate(0); } }
 @media (prefers-reduced-motion: reduce) { .splash-word span { animation: none; opacity: 1; transform: none; } }
+.detail { justify-content: flex-end; }

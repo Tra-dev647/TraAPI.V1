@@ -11,7 +11,6 @@ import Papa from "papaparse";
 import "./style.css";
 
 const PAGE_SIZE = 20;
-const LONG_TEXT = 130; // definitions longer than this get a "see more" hint
 const DATA_URL = `${import.meta.env.BASE_URL}data/kh_dictionary.csv`;
 
 // Normalize text so that search is case-insensitive and ignores zero-width
@@ -220,28 +219,26 @@ function App() {
                   >
                     <div className="word-line">
                       <span className="word">{item.word || "—"}</span>
-                      <span className="arrow">↗</span>
+                      <span className="arrow">{open ? "▲" : "▼"}</span>
                     </div>
-                    <p className={`definition ${open ? "full" : ""}`}>
-                      {item.definition || "មិនមាននិយមន័យ"}
-                    </p>
-                    {item.definition.length > LONG_TEXT && (
-                      <span className="more">{open ? "បង្រួម ▲" : "មើលបន្ថែម ▼"}</span>
-                    )}
                     {open && (
-                      <div className="detail">
-                        លេខសម្គាល់៖ {item.id}
-                        <button
-                          type="button"
-                          className="copy"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            copyItem(item);
-                          }}
-                        >
-                          {copiedId === item.id ? "បានចម្លង ✓" : "ចម្លងពាក្យ"}
-                        </button>
-                      </div>
+                      <>
+                        <p className="definition full">
+                          {item.definition || "មិនមាននិយមន័យ"}
+                        </p>
+                        <div className="detail">
+                          <button
+                            type="button"
+                            className="copy"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              copyItem(item);
+                            }}
+                          >
+                            {copiedId === item.id ? "បានចម្លង ✓" : "ចម្លងពាក្យ"}
+                          </button>
+                        </div>
+                      </>
                     )}
                   </div>
                 );
