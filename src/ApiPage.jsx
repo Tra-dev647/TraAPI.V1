@@ -211,7 +211,7 @@ export default function ApiPage() {
           <button type="button" className="back" onClick={() => go("/")}>← ត្រឡប់</button>
           <div className="api-title">
             <span className="seal small">ក</span>
-            <span>API</span>
+            <span>API for Developer</span>
           </div>
         </div>
         <div className="tabs" role="tablist">

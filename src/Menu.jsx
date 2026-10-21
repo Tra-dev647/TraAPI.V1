@@ -26,7 +26,7 @@ export default function Menu() {
           <div className="menu-backdrop" onClick={() => setOpen(false)} />
           <nav className="menu-panel">
             <button type="button" onClick={() => { setOpen(false); go("/developers"); }}>
-              ⚙️ API
+              ⚙️ API for Developer
             </button>
           </nav>
         </>

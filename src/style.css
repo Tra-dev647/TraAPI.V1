@@ -124,3 +124,4 @@ footer small { font-size: 11px; }
 .history-actions button { padding: 8px 12px; font-size: 14px; }
 .muted { color: #78847c; } .small { font-size: 13px; }
 .doc .modal-text, .doc .token-box { margin-left: 0; }
+.api-title { letter-spacing: 1px; font-size: 18px; }
