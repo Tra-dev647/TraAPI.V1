@@ -189,6 +189,10 @@ function App() {
           </div>
         )}
 
+        {!loading && !error && !hasQuery && (
+          <div className="prompt">សរសេរពាក្យដែលអ្នកចង់រក</div>
+        )}
+
         {!loading && hasQuery && results.length === 0 && (
           <div className="empty">
             <div className="book-icon">🔎</div>
