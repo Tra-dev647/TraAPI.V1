@@ -1,8 +1,8 @@
-import { loadDictionary, normalize, publicEntry, send, guard } from "./_lib.js";
+import { loadDictionary, normalize, publicEntry, send, guard, requireToken } from "./_lib.js";
 
 // GET /api/search?q=ស្មោះ&limit=20&page=1&exact=1
 export default function handler(req, res) {
-  if (guard(req, res)) return;
+  if (guard(req, res) || requireToken(req, res)) return;
   const q = normalize(String(req.query.q ?? "").trim());
   if (!q) return send(res, 400, { error: "Missing query parameter: q" });
 

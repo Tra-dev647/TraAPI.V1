@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { createRoot } from "react-dom/client";
 import Papa from "papaparse";
+import TokenMenu from "./TokenMenu.jsx";
 import "./style.css";
 
 const PAGE_SIZE = 20;
@@ -175,6 +176,7 @@ function App() {
     <div className="app-shell">
       <Splash onOut={() => setLogoShown(true)} />
       <header className="hero">
+        <TokenMenu />
         <div className={`topline ${logoShown ? "logo-drop" : "logo-hidden"}`}>
           <span className="seal">ក</span>
           <span>KHMER LANGUAGE • DICTIONARY</span>

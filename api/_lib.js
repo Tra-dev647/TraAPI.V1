@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 
 let cache = null;
 
@@ -75,23 +76,71 @@ export function loadDictionary() {
 
 export const publicEntry = ({ id, word, definition, short }) => ({ id, word, definition, short });
 
-export function send(res, status, body, cache = "public, s-maxage=86400, stale-while-revalidate=604800") {
+export function send(res, status, body, cache = "private, no-store") {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-API-Key");
   res.setHeader("Cache-Control", cache);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.status(status).send(JSON.stringify(body));
 }
 
 // Returns true when the request was fully handled (preflight or wrong method).
-export function guard(req, res) {
+export function guard(req, res, method = "GET") {
   if (req.method === "OPTIONS") {
     send(res, 204, null);
     return true;
   }
-  if (req.method !== "GET") {
-    send(res, 405, { error: "Method not allowed. Use GET." });
+  if (req.method !== method) {
+    send(res, 405, { error: `Method not allowed. Use ${method}.` });
+    return true;
+  }
+  return false;
+}
+
+// ---- Stateless API tokens (HMAC-signed, no database needed) ----
+const b64 = (buf) => Buffer.from(buf).toString("base64url");
+
+function sign(body) {
+  return crypto
+    .createHmac("sha256", process.env.TOKEN_SECRET)
+    .update(body)
+    .digest("base64url")
+    .slice(0, 32);
+}
+
+export function createToken() {
+  const body = b64(JSON.stringify({ i: crypto.randomBytes(8).toString("hex"), t: Date.now() }));
+  return `kd_${body}.${sign(body)}`;
+}
+
+function verifyToken(token) {
+  if (typeof token !== "string" || !token.startsWith("kd_")) return false;
+  const [body, sig] = token.slice(3).split(".");
+  if (!body || !sig) return false;
+  const expected = sign(body);
+  const a = Buffer.from(sig);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return false;
+  const revoked = (process.env.REVOKED_TOKENS || "").split(",").map((x) => x.trim()).filter(Boolean);
+  return !revoked.includes(token);
+}
+
+// Returns true when the request was rejected (401/500 already sent).
+export function requireToken(req, res) {
+  if (!process.env.TOKEN_SECRET) {
+    send(res, 500, { error: "Server is missing TOKEN_SECRET environment variable." });
+    return true;
+  }
+  const header = String(req.headers?.authorization || "");
+  const token =
+    (header.startsWith("Bearer ") ? header.slice(7).trim() : "") ||
+    String(req.headers?.["x-api-key"] || "") ||
+    String(req.query?.token || "");
+  if (!verifyToken(token)) {
+    send(res, 401, {
+      error: "Invalid or missing API token. Get one from the website menu, then send it as 'Authorization: Bearer <token>'."
+    });
     return true;
   }
   return false;

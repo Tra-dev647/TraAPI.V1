@@ -11,6 +11,7 @@ export default function handler(req, res) {
       search: "/api/search?q=ស្មោះ&limit=20&page=1&exact=0",
       word: "/api/word/ស្មោះ",
       random: "/api/random"
-    }
-  });
+    },
+    auth: "Send 'Authorization: Bearer <token>' (or ?token=). Get a token from the website menu."
+  }, "public, s-maxage=3600");
 }
