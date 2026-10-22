@@ -132,3 +132,5 @@ footer small { font-size: 11px; }
 .file-card b { display: block; font-size: 16px; }
 .file-card small { display: block; color: #59675e; font-size: 13px; line-height: 1.6; margin-top: 2px; }
 .file-icon { font-size: 26px; }
+.contact-box { display: grid; gap: 4px; margin: 18px 0; padding: 14px 16px; border: 1px solid #1b5136; border-radius: 12px; background: #eaf3ed; color: #1b3a2b; line-height: 1.8; }
+.contact-box a { color: #1b5136; font-weight: 600; }

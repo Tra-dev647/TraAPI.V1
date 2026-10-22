@@ -5,4 +5,5 @@
 - [Full documentation (Markdown)](https://tra-api-v1.vercel.app/docs/Tra-API.md): endpoints, parameters, examples, errors
 - [Documentation (PDF)](https://tra-api-v1.vercel.app/docs/Tra-API.pdf): same content as a PDF
 - [OpenAPI spec](https://tra-api-v1.vercel.app/docs/openapi.json): machine-readable schema
+- [Contact for the full word database](https://t.me/Tradev14): Telegram
 - [Get a token](https://tra-api-v1.vercel.app/developers): menu > API for Developer > Create API

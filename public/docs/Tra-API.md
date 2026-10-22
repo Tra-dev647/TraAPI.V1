@@ -126,6 +126,10 @@ print(r.json()["results"])
 
 1) Always send the token header. 2) Never hard-code a real token in public code; read it from an environment variable. 3) Respect 429 responses and wait Retry-After seconds. 4) URL-encode Khmer text. 5) Cache results on your side when possible.
 
+## Full word database and contact
+
+Need the complete word database (all Khmer and English-Khmer entries) or help with the API? Contact on Telegram: https://t.me/Tradev14
+
 ## Data sources and licenses
 
 Khmer to Khmer: Khmer Choun Nath Dictionary, Open Institute (LGPL 2.1). English to Khmer: SBBIC English Khmer Dictionary, Society for Better Books in Cambodia (MIT). Please credit both when you display the data.

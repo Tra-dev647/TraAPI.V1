@@ -119,6 +119,11 @@ print(r.json()["results"])`}</Code>
         </tbody>
       </table>
 
+      <div className="contact-box">
+        <b>📦 ចង់បានឃ្លាំងទិន្នន័យពាក្យទាំងអស់?</b>
+        <span>ទំនាក់ទំនងតាម Telegram៖ <a href="https://t.me/Tradev14" target="_blank" rel="noopener noreferrer">t.me/Tradev14</a></span>
+      </div>
+
       <p className="credit">ទិន្នន័យ៖ Khmer Choun Nath Dictionary / Open Institute (LGPL 2.1) · SBBIC English-Khmer Dictionary (MIT, Society for Better Books in Cambodia)</p>
     </div>
   );
@@ -258,6 +263,11 @@ function AiTab() {
             </span>
           </a>
         ))}
+      </div>
+
+      <div className="contact-box">
+        <b>📦 ចង់បានឃ្លាំងទិន្នន័យពាក្យទាំងអស់?</b>
+        <span>ទំនាក់ទំនងតាម Telegram៖ <a href="https://t.me/Tradev14" target="_blank" rel="noopener noreferrer">t.me/Tradev14</a></span>
       </div>
 
       <h2>របៀបប្រើ</h2>
