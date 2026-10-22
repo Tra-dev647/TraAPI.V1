@@ -1,0 +1,8 @@
+# Tra Khmer Dictionary API
+
+> JSON REST API for Khmer to Khmer (Choun Nath) and English to Khmer (SBBIC) dictionary lookups. Requires a free token.
+
+- [Full documentation (Markdown)](https://tra-api-v1.vercel.app/docs/Tra-API.md): endpoints, parameters, examples, errors
+- [Documentation (PDF)](https://tra-api-v1.vercel.app/docs/Tra-API.pdf): same content as a PDF
+- [OpenAPI spec](https://tra-api-v1.vercel.app/docs/openapi.json): machine-readable schema
+- [Get a token](https://tra-api-v1.vercel.app/developers): menu > API for Developer > Create API

@@ -125,3 +125,10 @@ footer small { font-size: 11px; }
 .muted { color: #78847c; } .small { font-size: 13px; }
 .doc .modal-text, .doc .token-box { margin-left: 0; }
 .api-title { letter-spacing: 1px; font-size: 18px; }
+
+.file-list { display: grid; gap: 10px; margin: 10px 0; }
+.file-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #d5dfd7; border-radius: 12px; background: #fff; color: #1b3a2b; text-decoration: none; }
+.file-card:hover { border-color: #1b5136; background: #f4f8f5; }
+.file-card b { display: block; font-size: 16px; }
+.file-card small { display: block; color: #59675e; font-size: 13px; line-height: 1.6; margin-top: 2px; }
+.file-icon { font-size: 26px; }

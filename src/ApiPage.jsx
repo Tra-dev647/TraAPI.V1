@@ -157,7 +157,7 @@ function CreateTab({ base }) {
   return (
     <div className="doc">
       <h2>បង្កើត API Token</h2>
-      <p>Token ប្រើបានគ្មានកំណត់ទាំងចំនួន និងរយៈពេល។ រក្សាវាជាសម្ងាត់។</p>
+      <p>Token មានសុពលភាព ៩០ ថ្ងៃ ហើយមានកម្រិត ៦០ សំណើក្នុងមួយនាទី។ រក្សាវាជាសម្ងាត់។</p>
       <div className="modal-actions">
         <button type="button" className="primary" onClick={create} disabled={loading}>
           {loading ? "កំពុងបង្កើត…" : "＋ បង្កើត Token ថ្មី"}
@@ -208,6 +208,64 @@ function CreateTab({ base }) {
   );
 }
 
+function AiTab() {
+  const [copied, copy] = useCopy();
+  const [error, setError] = useState("");
+
+  async function copyForAi() {
+    setError("");
+    try {
+      const res = await fetch("/docs/Tra-API.md");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      await copy(
+        `Read this API documentation and help me write code that uses it:\n\n${text}`,
+        "ai"
+      );
+    } catch (err) {
+      setError(`មិនអាចចម្លងបានទេ៖ ${err.message}`);
+    }
+  }
+
+  const files = [
+    { icon: "📄", name: "PDF", note: "ឯកសារ API ជា PDF សម្រាប់ទាញយក ឬផ្ទុកឡើងទៅ AI", href: "/docs/Tra-API.pdf", dl: true },
+    { icon: "📝", name: "Markdown", note: "អត្ថបទសុទ្ធ ងាយបិទភ្ជាប់ក្នុង AI គ្រប់ប្រភេទ", href: "/docs/Tra-API.md", dl: true },
+    { icon: "🧩", name: "OpenAPI (JSON)", note: "សម្រាប់ Custom GPT, Postman និងឧបករណ៍ផ្សេងៗ", href: "/docs/openapi.json", dl: false },
+    { icon: "🤖", name: "llms.txt", note: "សន្ទស្សន៍ឲ្យ AI និងប្រព័ន្ធស្វែងរកស្គាល់ឯកសារ", href: "/llms.txt", dl: false }
+  ];
+
+  return (
+    <div className="doc">
+      <h2>ឯកសារសម្រាប់ AI</h2>
+      <p>ទាញយក ឬចម្លងឯកសារខាងក្រោម ហើយឲ្យទៅ AI (ChatGPT, Claude, Gemini, Copilot…) ដើម្បីឲ្យវាសរសេរកូដប្រើ API នេះឲ្យអ្នក។</p>
+
+      <div className="modal-actions">
+        <button type="button" className="primary" onClick={copyForAi}>
+          {copied === "ai" ? "បានចម្លង ✓" : "📋 ចម្លងសម្រាប់ AI"}
+        </button>
+      </div>
+      {error && <div className="notice error">{error}</div>}
+      <p>ចុចហើយបិទភ្ជាប់ (Paste) ក្នុង AI ណាមួយ។ កុំដាក់ Token ពិតក្នុងសារ លុះត្រាតែចាំបាច់។</p>
+
+      <h2>ទាញយកឯកសារ</h2>
+      <div className="file-list">
+        {files.map((f) => (
+          <a key={f.href} className="file-card" href={f.href} target="_blank" rel="noopener noreferrer" {...(f.dl ? { download: true } : {})}>
+            <span className="file-icon">{f.icon}</span>
+            <span>
+              <b>{f.name}</b>
+              <small>{f.note}</small>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <h2>របៀបប្រើ</h2>
+      <p>១) ចម្លង ឬទាញយកឯកសារ ២) បិទភ្ជាប់ ឬផ្ទុកឡើងទៅ AI ៣) សុំឲ្យវា "សរសេរកូដស្វែងរកពាក្យតាមឯកសារនេះ" ៤) ដាក់ Token របស់អ្នកក្នុងកូដដោយខ្លួនឯង។</p>
+    </div>
+  );
+}
+
 export default function ApiPage() {
   const [tab, setTab] = useState("docs");
   const base = window.location.origin;
@@ -229,10 +287,13 @@ export default function ApiPage() {
           <button type="button" role="tab" aria-selected={tab === "create"} className={tab === "create" ? "on" : ""} onClick={() => setTab("create")}>
             🔑 បង្កើត API
           </button>
+          <button type="button" role="tab" aria-selected={tab === "ai"} className={tab === "ai" ? "on" : ""} onClick={() => setTab("ai")}>
+            🤖 AI &amp; PDF
+          </button>
         </div>
       </header>
       <main className="content">
-        {tab === "docs" ? <DocsTab base={base} /> : <CreateTab base={base} />}
+        {tab === "docs" ? <DocsTab base={base} /> : tab === "ai" ? <AiTab /> : <CreateTab base={base} />}
       </main>
     </div>
   );
