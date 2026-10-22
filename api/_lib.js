@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { clientIp, hit, isBlockedIp } from "./_security.js";
 
 let cache = null;
 
@@ -115,7 +116,8 @@ export function createToken() {
 }
 
 // 0 = tokens never expire (default). Set TOKEN_DAYS in Vercel to add an expiry.
-export const tokenDays = () => Number(process.env.TOKEN_DAYS) || 0;
+// Default 90 days. Set TOKEN_DAYS=0 in Vercel for tokens that never expire.
+export const tokenDays = () => (process.env.TOKEN_DAYS === undefined ? 90 : Number(process.env.TOKEN_DAYS) || 0);
 
 function verifyToken(token) {
   if (typeof token !== "string") return false;
@@ -141,6 +143,10 @@ function verifyToken(token) {
 
 // Returns true when the request was rejected (401/500 already sent).
 export function requireToken(req, res) {
+  if (isBlockedIp(req)) {
+    send(res, 403, { error: "Access denied." });
+    return true;
+  }
   if (!process.env.TOKEN_SECRET) {
     send(res, 500, { error: "Server is missing TOKEN_SECRET environment variable." });
     return true;
@@ -150,10 +156,28 @@ export function requireToken(req, res) {
     (header.startsWith("Bearer ") ? header.slice(7).trim() : "") ||
     String(req.headers?.["x-api-key"] || "") ||
     String(req.query?.token || "");
+  const ip = clientIp(req);
   if (!verifyToken(token)) {
+    // Throttle brute-force / token-guessing: 20 bad attempts per 10 min per IP.
+    const bad = hit(`bad:${ip}`, 20, 10 * 60 * 1000);
+    if (!bad.ok) {
+      res.setHeader("Retry-After", String(bad.retryAfter));
+      send(res, 429, { error: "Too many invalid attempts. Try again later." });
+      return true;
+    }
     send(res, 401, {
       error: "Invalid or missing API token. Get one from the website menu, then send it as 'Authorization: Bearer <token>'."
     });
+    return true;
+  }
+  // Per-token + IP quota (default 60 requests/minute, override with RATE_LIMIT).
+  const limit = Number(process.env.RATE_LIMIT) || 60;
+  const q = hit(`api:${token.slice(-16)}:${ip}`, limit, 60 * 1000);
+  res.setHeader("X-RateLimit-Limit", String(limit));
+  res.setHeader("X-RateLimit-Remaining", String(q.remaining));
+  if (!q.ok) {
+    res.setHeader("Retry-After", String(q.retryAfter));
+    send(res, 429, { error: "Rate limit exceeded. Slow down.", retryAfter: q.retryAfter });
     return true;
   }
   return false;
@@ -163,7 +187,7 @@ export function requireToken(req, res) {
 let enCache = null;
 export function loadEnglish() {
   if (enCache) return enCache;
-  const file = path.join(process.cwd(), "public", "data", "en_km_dictionary.csv");
+  const file = path.join(process.cwd(), "data", "en_km_dictionary.csv");
   const [header, ...body] = parseCsv(fs.readFileSync(file, "utf8"));
   const idx = Object.fromEntries(header.map((h, i) => [h.trim(), i]));
   enCache = body
