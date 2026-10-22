@@ -120,7 +120,7 @@ print(r.json()["results"])`}</Code>
       </table>
 
       <div className="contact-box">
-        <b>📦 ចង់បានឃ្លាំងទិន្នន័យពាក្យទាំងអស់?</b>
+        <b>ចង់បានឃ្លាំងទិន្នន័យពាក្យទាំងអស់?</b>
         <span>ទំនាក់ទំនងតាម Telegram៖ <a href="https://t.me/Tradev14" target="_blank" rel="noopener noreferrer">t.me/Tradev14</a></span>
       </div>
 
@@ -200,7 +200,7 @@ function CreateTab({ base }) {
                 <button type="button" onClick={() => copy(h.token, h.token)}>
                   {copied === h.token ? "✓" : "ចម្លង"}
                 </button>
-                <button type="button" onClick={() => remove(h.token)} aria-label="លុប">🗑</button>
+                <button type="button" onClick={() => remove(h.token)} aria-label="លុប">លុប</button>
               </div>
             </li>
           ))}
@@ -233,10 +233,10 @@ function AiTab() {
   }
 
   const files = [
-    { icon: "📄", name: "PDF", note: "ឯកសារ API ជា PDF សម្រាប់ទាញយក ឬផ្ទុកឡើងទៅ AI", href: "/docs/Tra-API.pdf", dl: true },
-    { icon: "📝", name: "Markdown", note: "អត្ថបទសុទ្ធ ងាយបិទភ្ជាប់ក្នុង AI គ្រប់ប្រភេទ", href: "/docs/Tra-API.md", dl: true },
-    { icon: "🧩", name: "OpenAPI (JSON)", note: "សម្រាប់ Custom GPT, Postman និងឧបករណ៍ផ្សេងៗ", href: "/docs/openapi.json", dl: false },
-    { icon: "🤖", name: "llms.txt", note: "សន្ទស្សន៍ឲ្យ AI និងប្រព័ន្ធស្វែងរកស្គាល់ឯកសារ", href: "/llms.txt", dl: false }
+    { name: "PDF", note: "ឯកសារ API ជា PDF សម្រាប់ទាញយក ឬផ្ទុកឡើងទៅ AI", href: "/docs/Tra-API.pdf", dl: true },
+    { name: "Markdown", note: "អត្ថបទសុទ្ធ ងាយបិទភ្ជាប់ក្នុង AI គ្រប់ប្រភេទ", href: "/docs/Tra-API.md", dl: true },
+    { name: "OpenAPI (JSON)", note: "សម្រាប់ Custom GPT, Postman និងឧបករណ៍ផ្សេងៗ", href: "/docs/openapi.json", dl: false },
+    { name: "llms.txt", note: "សន្ទស្សន៍ឲ្យ AI និងប្រព័ន្ធស្វែងរកស្គាល់ឯកសារ", href: "/llms.txt", dl: false }
   ];
 
   return (
@@ -246,7 +246,7 @@ function AiTab() {
 
       <div className="modal-actions">
         <button type="button" className="primary" onClick={copyForAi}>
-          {copied === "ai" ? "បានចម្លង ✓" : "📋 ចម្លងសម្រាប់ AI"}
+          {copied === "ai" ? "បានចម្លង ✓" : "ចម្លងសម្រាប់ AI"}
         </button>
       </div>
       {error && <div className="notice error">{error}</div>}
@@ -256,7 +256,6 @@ function AiTab() {
       <div className="file-list">
         {files.map((f) => (
           <a key={f.href} className="file-card" href={f.href} target="_blank" rel="noopener noreferrer" {...(f.dl ? { download: true } : {})}>
-            <span className="file-icon">{f.icon}</span>
             <span>
               <b>{f.name}</b>
               <small>{f.note}</small>
@@ -266,7 +265,7 @@ function AiTab() {
       </div>
 
       <div className="contact-box">
-        <b>📦 ចង់បានឃ្លាំងទិន្នន័យពាក្យទាំងអស់?</b>
+        <b>ចង់បានឃ្លាំងទិន្នន័យពាក្យទាំងអស់?</b>
         <span>ទំនាក់ទំនងតាម Telegram៖ <a href="https://t.me/Tradev14" target="_blank" rel="noopener noreferrer">t.me/Tradev14</a></span>
       </div>
 
@@ -292,13 +291,13 @@ export default function ApiPage() {
         </div>
         <div className="tabs" role="tablist">
           <button type="button" role="tab" aria-selected={tab === "docs"} className={tab === "docs" ? "on" : ""} onClick={() => setTab("docs")}>
-            📘 Docs
+            Docs
           </button>
           <button type="button" role="tab" aria-selected={tab === "create"} className={tab === "create" ? "on" : ""} onClick={() => setTab("create")}>
-            🔑 បង្កើត API
+            បង្កើត API
           </button>
           <button type="button" role="tab" aria-selected={tab === "ai"} className={tab === "ai" ? "on" : ""} onClick={() => setTab("ai")}>
-            🤖 AI &amp; PDF
+            AI &amp; PDF
           </button>
         </div>
       </header>
